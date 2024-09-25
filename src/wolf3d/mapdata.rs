@@ -1,3 +1,7 @@
+use std::io::BufReader;
+
+use byteorder::{LittleEndian, ReadBytesExt};
+
 #[derive(Debug)]
 pub struct MapData {
     pub plane0: Vec<u8>,
@@ -24,6 +28,28 @@ impl MapData {
             width,
             height,
             name,
+        }
+    }
+
+    pub fn print(self: &Self) {
+        println!("=========== Name: {} ===========", self.name);
+        let mut plane0buf = BufReader::new(&self.plane0[..]);
+        for _ in 0..self.height {
+            for _ in 0..self.width {
+                let c = plane0buf.read_u16::<LittleEndian>().unwrap();
+                if c <= 63 {
+                    print!("X");
+                } else if c >= 90 && c <= 95 {
+                    print!("#");
+                } else if c >= 100 && c <= 101 {
+                    print!("!");
+                } else if c >= 106 && c <= 143 {
+                    print!(".");
+                } else {
+                    print!(" ");
+                }
+            }
+            println!();
         }
     }
 }

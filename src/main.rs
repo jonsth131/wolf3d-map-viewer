@@ -21,7 +21,9 @@ fn main() {
             let result = wolf3d::read_gamemaps(&path);
             match result {
                 Ok(gamemaps) => {
-                    println!("Ok");
+                    for map in gamemaps {
+                        map.print();
+                    }
                 }
                 Err(e) => {
                     eprintln!("Error: {}", e);
